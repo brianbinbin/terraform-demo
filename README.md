@@ -24,3 +24,5 @@ terraform apply -auto-approve -var="key_name=aws-west-bench" -var="os=ubuntu" -v
 - emqx_package: the path of emqx package
 
 
+
+
