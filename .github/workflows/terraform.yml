@@ -44,7 +44,7 @@
 #       - name: Show private ip
 #         run: echo "${{ env.private_ip }}"
 
-name: Awscli Start Xmeter
+name: "Awscli Start Xmeter"
 
 on:
   push:
@@ -52,7 +52,6 @@ on:
 jobs:
   awscli:
     runs-on: ubuntu-latest
-    needs: build
 
     steps:
       - name: Install awscli
