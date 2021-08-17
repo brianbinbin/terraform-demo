@@ -1,4 +1,4 @@
-name: "Terraform"
+name: "kafka"
 
 on:
   push:
@@ -6,18 +6,15 @@ on:
       - main
 
 jobs:
-  terraform:
-    name: "Terraform"
+  kafka:
+    name: "kafka"
     runs-on: ubuntu-latest
     steps:
-      - name: Download emqx package
-        run: "curl -L --max-redirs -1 -o /tmp/emqx.zip https://www.emqx.com/zh/downloads/enterprise/4.3.2/emqx-ee-ubuntu20.04-4.3.2-amd64.zip"
-
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          repository: emqx/tf-test-automation
-          path: tf-test-automation
+          repository: brianbinbin/tf-kafka-demo
+          path: tf-kafka-demo
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
@@ -25,23 +22,31 @@ jobs:
           terraform_wrapper: false
 
       - name: Terraform Init
-        working-directory: ./tf-test-automation
+        working-directory: ./tf-kafka-demo
         id: init
         run: terraform init
 
       - name: Terraform Validate
-        working-directory: ./tf-test-automation
+        working-directory: ./tf-kafka-demo
         id: validate
         run: terraform validate -no-color
 
       - name: Terraform Apply
-        working-directory: ./tf-test-automation
+        working-directory: ./tf-kafka-demo
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: |
-          terraform apply -auto-approve -var="key_name=aws-west-bench" -var="os=ubuntu" -var="region=us-west-2" -var="emqx_lic=${{ secrets.EMQX_LIC }}"  -var="access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" -var="private_key=${{ secrets.SSH_PRIVATE_KEY }}" -var="emqx_package=/tmp/emqx.zip"
-          echo "private_ip=$(terraform output private_ip)" >> $GITHUB_ENV
+          terraform apply -auto-approve  -var="access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+          echo "zookeeper_connect_string=$(terraform output zookeeper_connect_string)" >> $GITHUB_ENV
+          echo "bootstrap_brokers_tls=$(terraform output bootstrap_brokers_tls)" >> $GITHUB_ENV
+          echo "bootstrap_brokers=$(terraform output bootstrap_brokers)" >> $GITHUB_ENV
+          echo "arn=$(terraform output arn)" >> $GITHUB_ENV
 
       - name: Show private ip
-        run: echo "${{ env.private_ip }}"
+        run: |
+          echo "${{ env.zookeeper_connect_string }}"
+          echo "${{ env.bootstrap_brokers_tls }}"
+          echo "${{ env.bootstrap_brokers }}"
+          echo "${{ env.arn }}"
+
 
 
