@@ -13,3 +13,6 @@ jobs:
       - name: run kafka
         run: | 
           sudo apt install openjdk-11-jre-headless
+          sudo wget https://archive.apache.org/dist/kafka/2.6.0/kafka_2.12-2.6.0.tgz -O ./kafka.tgz
+          sudo tar -zxvf ./kafka_2.12-2.6.0.tgz
+          sudo ./kafka_2.12-2.6.0/bin/kafka-topics.sh --zookeeper z-1.kafka.ohcicq.c2.kafka.ap-southeast-1.amazonaws.com:2181 --list
