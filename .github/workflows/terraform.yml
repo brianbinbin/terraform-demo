@@ -11,5 +11,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: run kafka
-        run:|
-          "apt install openjdk-11-jre-headless"
+        run: | 
+          apt install openjdk-11-jre-headless
