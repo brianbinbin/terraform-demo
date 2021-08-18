@@ -27,12 +27,12 @@ jobs:
 
       - name: Terraform Init
         working-directory: ./tf-test-automation
-        id: init
+        id: init1
         run: terraform init
 
       - name: Terraform Validate
         working-directory: ./tf-test-automation
-        id: validate
+        id: validate1
         run: terraform validate -no-color
 
       - name: Terraform Apply
@@ -48,19 +48,14 @@ jobs:
           repository: emqx/tf-kafka-client
           path: tf-kafka-client
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
-        with:
-          terraform_wrapper: false
-
       - name: Terraform Init
         working-directory: ./tf-kafka-client
-        id: init
+        id: init2
         run: terraform init
 
       - name: Terraform Validate
         working-directory: ./tf-kafka-client
-        id: validate
+        id: validate2
         run: terraform validate -no-color
 
       - name: Terraform Apply
