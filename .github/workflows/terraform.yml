@@ -21,6 +21,9 @@ jobs:
           ref: cluster
           path: tf-test-automation
 
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+
       - name: Terraform Init tf-test-automation
         working-directory: ./tf-test-automation
         id: init1
