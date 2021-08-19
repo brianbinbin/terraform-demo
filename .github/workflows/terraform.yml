@@ -76,3 +76,4 @@ jobs:
         run: terraform apply -auto-approve -var="key_name=aws-west-bench" -var="region=us-west-2" -var="access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" -var="zk_ip=${{ env.zk_ip }}" -var="kafka_topic=testTopic2" -var="private_key=${{ secrets.SSH_PRIVATE_KEY }}"
 
 
+
