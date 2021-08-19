@@ -81,7 +81,7 @@ jobs:
           echo "kafka_cli_ip=$(terraform output public_ip)" >> $GITHUB_ENV
 
       - name: Show kafka cli ip
-        echo "${{ env.kafka_cli_ip }}"
+        run: echo "${{ env.kafka_cli_ip }}"
 
 
 
