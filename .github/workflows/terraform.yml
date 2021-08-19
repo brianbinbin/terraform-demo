@@ -24,7 +24,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1.3.2
         with:
-          terraform_wrapper: true
+          terraform_wrapper: false
 
       - name: Terraform Init tf-test-automation
         working-directory: ./tf-test-automation
@@ -38,30 +38,34 @@ jobs:
 
       - name: Terraform Apply tf-test-automation
         working-directory: ./tf-test-automation
-          #if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: github.event_name == 'push'
         run: terraform apply -auto-approve -var="key_name=aws-west-bench" -var="os=ubuntu" -var="region=us-west-2" -var="emqx_lic=${{ secrets.EMQX_LIC }}" -var="access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" -var="private_key=${{ secrets.SSH_PRIVATE_KEY }}" -var="emqx_package=/tmp/emqx.zip" 
+        echo "zk_ip=$(terraform output zk_ip)" >> $GITHUB_ENV
 
-          # echo "zk_ip=$(terraform output zk_ip)" >> $GITHUB_ENV
+      - name: Show emqx ips
+        run: echo "$(terraform output emqx_public_ips)"
 
+      - name: Show kafka & zk ips
+        run: echo "$(terraform output kafka_bootstrap_brokers_tls)"
+        run: echo "$(terraform output zookeeper_connect_string)"
 
-          #- name: Checkout tf-kafka-client
-          #  uses: actions/checkout@v2
-          #  with:
-          #    repository: emqx/tf-kafka-client
-          #    path: tf-kafka-client
+      - name: Checkout tf-kafka-client
+        uses: actions/checkout@v2
+        with:
+          repository: emqx/tf-kafka-client
+          path: tf-kafka-client
 
-          #- name: Terraform Init tf-kafka-client
-          #  working-directory: ./tf-kafka-client
-          #  id: init2
-          #  run: terraform init
+      - name: Terraform Init tf-kafka-client
+        working-directory: ./tf-kafka-client
+        id: init2
+        run: terraform init
 
-          #- name: Terraform Validate tf-kafka-client
-          #  working-directory: ./tf-kafka-client
-          #  id: validate2
-          #  run: terraform validate -no-color
+      - name: Terraform Validate tf-kafka-client
+        working-directory: ./tf-kafka-client
+        id: validate2
+        run: terraform validate -no-color
 
-          #- name: Terraform Apply tf-kafka-client
-          #  working-directory: ./tf-kafka-client
-          #  if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-          #  run: |
-          #    terraform apply -auto-approve -var="access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" -var="zk_ip=${{ env.zk_ip }}" -var="kafka_topic=testTopic2" -var="private_key=${{ secrets.SSH_PRIVATE_KEY }}"
+      - name: Terraform Apply tf-kafka-client
+        working-directory: ./tf-kafka-client
+        if: github.event_name == 'push'
+        run: terraform apply -auto-approve -var="access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" -var="zk_ip=${{ env.zk_ip }}" -var="kafka_topic=testTopic2" -var="private_key=${{ secrets.SSH_PRIVATE_KEY }}"
