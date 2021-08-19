@@ -11,45 +11,48 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # install emqx and kafka cluster
-      - name: Download emqx package
-        run: "curl -L --max-redirs -1 -o /tmp/emqx.zip https://www.emqx.com/zh/downloads/enterprise/4.3.2/emqx-ee-ubuntu20.04-4.3.2-amd64.zip"
+      # - name: Download emqx package
+      #   run: "curl -L --max-redirs -1 -o /tmp/emqx.zip https://www.emqx.com/zh/downloads/enterprise/4.3.2/emqx-ee-ubuntu20.04-4.3.2-amd64.zip"
 
-      - name: Checkout tf-test-automation
-        uses: actions/checkout@v2
-        with:
-          repository: emqx/tf-test-automation
-          ref: cluster
-          path: tf-test-automation
+      # - name: Checkout tf-test-automation
+      #   uses: actions/checkout@v2
+      #   with:
+      #     repository: emqx/tf-test-automation
+      #     ref: cluster
+      #     path: tf-test-automation
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1.3.2
-        with:
-          terraform_wrapper: false
+      # - name: Setup Terraform
+      #   uses: hashicorp/setup-terraform@v1.3.2
+      #   with:
+      #     terraform_wrapper: false
 
-      - name: Terraform Init tf-test-automation
-        working-directory: ./tf-test-automation
-        id: init1
-        run: terraform init
+      # - name: Terraform Init tf-test-automation
+      #   working-directory: ./tf-test-automation
+      #   id: init1
+      #   run: terraform init
 
-      - name: Terraform Validate tf-test-automation
-        working-directory: ./tf-test-automation
-        id: validate1
-        run: terraform validate -no-color
+      # - name: Terraform Validate tf-test-automation
+      #   working-directory: ./tf-test-automation
+      #   id: validate1
+      #   run: terraform validate -no-color
 
-      - name: Terraform Apply tf-test-automation
-        working-directory: ./tf-test-automation
-        if: github.event_name == 'push'
-        run: |
-          terraform apply -auto-approve -var="key_name=aws-west-bench" -var="os=ubuntu" -var="region=us-west-2" -var="emqx_lic=${{ secrets.EMQX_LIC }}" -var="access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" -var="private_key=${{ secrets.SSH_PRIVATE_KEY }}" -var="emqx_package=/tmp/emqx.zip" 
-          echo "zk_ip=$(terraform output zk_ip)" >> $GITHUB_ENV
+      # - name: Terraform Apply tf-test-automation
+      #   working-directory: ./tf-test-automation
+      #   if: github.event_name == 'push'
+      #   run: |
+      #     terraform apply -auto-approve -var="key_name=aws-west-bench" -var="os=ubuntu" -var="region=us-west-2" -var="emqx_lic=${{ secrets.EMQX_LIC }}" -var="access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" -var="private_key=${{ secrets.SSH_PRIVATE_KEY }}" -var="emqx_package=/tmp/emqx.zip" 
+      #     echo "zk_ip=$(terraform output zk_ip)" >> $GITHUB_ENV
 
-      - name: Show emqx ips
-        run: echo "$(terraform output emqx_public_ips)"
+      # - name: Show emqx ips
+      #   run: echo "$(terraform output emqx_public_ips)"
 
-      - name: Show kafka & zk ips
-        run: |
-          echo "$(terraform output kafka_bootstrap_brokers_tls)"
-          echo "$(terraform output zookeeper_connect_string)"
+      # - name: Show kafka & zk ips
+      #   run: |
+      #     echo "$(terraform output kafka_bootstrap_brokers_tls)"
+      #     echo "$(terraform output zookeeper_connect_string)"
+
+
+      # install kafka client
 
       - name: Checkout tf-kafka-client
         uses: actions/checkout@v2
