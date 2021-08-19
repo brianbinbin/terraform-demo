@@ -77,12 +77,13 @@ jobs:
         working-directory: ./tf-kafka-client
         if: github.event_name == 'push'
         run: |
-          #terraform apply -auto-approve -var="ami=ami-08a9f7fa1bcd0571e" -var="key_name=aws-west-bench" -var="region=us-west-2" -var="access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" -var="zk_ip=${{ env.zk_ip }}" -var="kafka_topic=testTopic2" -var="private_key=${{ secrets.SSH_PRIVATE_KEY }}"
-          terraform apply -auto-approve -var="ami=ami-08a9f7fa1bcd0571e" -var="key_name=aws-west-bench" -var="region=us-west-2" -var="access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" -var="zk_ip=b-1.kafka.qvjbjx.c8.kafka.us-west-2.amazonaws.com:2181" -var="kafka_topic=testTopic2" -var="private_key=${{ secrets.SSH_PRIVATE_KEY }}"
+          terraform apply -auto-approve -var="ami=ami-08a9f7fa1bcd0571e" -var="key_name=aws-west-bench" -var="region=us-west-2" -var="access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" -var="zk_ip=b-1.kafka.qvjbjx.c8.kafka.us-west-2.amazonaws.com:2181"  -var="private_key=${{ secrets.SSH_PRIVATE_KEY }}"
           echo "kafka_cli_ip=$(terraform output public_ip)" >> $GITHUB_ENV
 
       - name: Show kafka cli ip
         run: echo "${{ env.kafka_cli_ip }}"
 
 
+          #terraform apply -auto-approve -var="ami=ami-08a9f7fa1bcd0571e" -var="key_name=aws-west-bench" -var="region=us-west-2" -var="access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" -var="zk_ip=${{ env.zk_ip }}" -var="kafka_topic=testTopic2" -var="private_key=${{ secrets.SSH_PRIVATE_KEY }}"
+          #terraform apply -auto-approve -var="ami=ami-08a9f7fa1bcd0571e" -var="key_name=aws-west-bench" -var="region=us-west-2" -var="access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" -var="zk_ip=b-1.kafka.qvjbjx.c8.kafka.us-west-2.amazonaws.com:2181" -var="kafka_topic=testTopic2" -var="private_key=${{ secrets.SSH_PRIVATE_KEY }}"
 
