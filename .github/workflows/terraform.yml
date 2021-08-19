@@ -39,8 +39,9 @@ jobs:
       - name: Terraform Apply tf-test-automation
         working-directory: ./tf-test-automation
         if: github.event_name == 'push'
-        run: terraform apply -auto-approve -var="key_name=aws-west-bench" -var="os=ubuntu" -var="region=us-west-2" -var="emqx_lic=${{ secrets.EMQX_LIC }}" -var="access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" -var="private_key=${{ secrets.SSH_PRIVATE_KEY }}" -var="emqx_package=/tmp/emqx.zip" 
-        echo "zk_ip=$(terraform output zk_ip)" >> $GITHUB_ENV
+        run: |
+          terraform apply -auto-approve -var="key_name=aws-west-bench" -var="os=ubuntu" -var="region=us-west-2" -var="emqx_lic=${{ secrets.EMQX_LIC }}" -var="access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" -var="private_key=${{ secrets.SSH_PRIVATE_KEY }}" -var="emqx_package=/tmp/emqx.zip" 
+          echo "zk_ip=$(terraform output zk_ip)" >> $GITHUB_ENV
 
       - name: Show emqx ips
         run: echo "$(terraform output emqx_public_ips)"
