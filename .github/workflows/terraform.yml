@@ -47,8 +47,9 @@ jobs:
         run: echo "$(terraform output emqx_public_ips)"
 
       - name: Show kafka & zk ips
-        run: echo "$(terraform output kafka_bootstrap_brokers_tls)"
-        run: echo "$(terraform output zookeeper_connect_string)"
+        run: |
+          echo "$(terraform output kafka_bootstrap_brokers_tls)"
+          echo "$(terraform output zookeeper_connect_string)"
 
       - name: Checkout tf-kafka-client
         uses: actions/checkout@v2
