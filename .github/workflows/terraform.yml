@@ -81,6 +81,7 @@ jobs:
           terraform apply -auto-approve -var="access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" -var="zk_ip=${{ env.zk_ip }}" -var="kafka_topic=testTopic1" -var="private_key=${{ secrets.SSH_PRIVATE_KEY }}"
           echo "kafka_cli_ip=$(terraform output public_ip)" >> $GITHUB_ENV
 
+
       - name: Show kafka cli ip
         run: echo "${{ env.kafka_cli_ip }}"
 
