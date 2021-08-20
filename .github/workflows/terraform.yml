@@ -43,17 +43,9 @@ jobs:
         run: |
           terraform apply -auto-approve -var="emqx_lic=${{ secrets.EMQX_LIC }}" -var="access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" -var="private_key=${{ secrets.SSH_PRIVATE_KEY }}" -var="emqx_package=/tmp/emqx.zip" 
           echo "zk_ip=$(terraform output zk_ip)" >> $GITHUB_ENV
-          echo "emqx_public_ips=$(terraform output emqx_public_ips)" >> $GITHUB_ENV
-          echo "kafka_bootstrap_brokers_tls=$(terraform output kafka_bootstrap_brokers_tls)" >> $GITHUB_ENV
-          echo "zookeeper_connect_string=$(terraform output zookeeper_connect_string)" >> $GITHUB_ENV
 
-      - name: Show emqx ips
-        run: echo "${{ env.emqx_public_ips }}"
-
-      - name: Show kafka & zk ips
-        run: |
-          echo "${{ env.kafka_bootstrap_brokers_tls }}"
-          echo "${{ env.zookeeper_connect_string }}"
+      - name: Show zk ip
+        run: echo "${{ env.zk_ip }}"
 
 
       # install kafka client
